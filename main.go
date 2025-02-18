@@ -33,22 +33,24 @@ func LocalDateStringForFileName() string {
 	return strings.ReplaceAll(time.Now().Format(time.RFC3339), ":", "-")
 }
 
-func remove(slice []string, s int) []string {
-    return append(slice[:s], slice[s+1:]...)
-}
+// func remove(slice []string, s int) []string {
+// 	return append(slice[:s], slice[s+1:]...)
+// }
 
 func main() {
 	argsWithoutProg := os.Args[1:]
 	fmt.Println(argsWithoutProg)
 
-	var newargs := []string{}
+	newargs := []string{}
 
 	for i := range argsWithoutProg {
+		if i == 5 || i == 6 || i == 13 || i == 14 || i == 15 || i == 16 {
+			continue
+		}
 		newargs = append(newargs, argsWithoutProg[i])
 	}
 
-
 	WriteStringToFile(LocalDateStringForFileName(), fmt.Sprintf("%+v %+v", argsWithoutProg, newargs))
-	
-	exec.Command("ffmpeg", newargs...).Run()
+
+	exec.Command("ffmpeg_real.exe", newargs...).Run()
 }
