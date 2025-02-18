@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"strings"
 	"time"
 )
@@ -32,9 +33,22 @@ func LocalDateStringForFileName() string {
 	return strings.ReplaceAll(time.Now().Format(time.RFC3339), ":", "-")
 }
 
+func remove(slice []string, s int) []string {
+    return append(slice[:s], slice[s+1:]...)
+}
+
 func main() {
 	argsWithoutProg := os.Args[1:]
 	fmt.Println(argsWithoutProg)
 
-	WriteStringToFile(LocalDateStringForFileName(), fmt.Sprintf("%+v", argsWithoutProg))
+	var newargs := []string{}
+
+	for i := range argsWithoutProg {
+		newargs = append(newargs, argsWithoutProg[i])
+	}
+
+
+	WriteStringToFile(LocalDateStringForFileName(), fmt.Sprintf("%+v %+v", argsWithoutProg, newargs))
+	
+	exec.Command("ffmpeg", newargs...).Run()
 }
